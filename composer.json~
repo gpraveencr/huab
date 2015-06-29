@@ -1,0 +1,22 @@
+{
+  "name" : "HUAB",
+  "version" : "1.0",
+  "require" : {
+    "php" : ">=5.3"
+  },
+  "minimum-stability" : "alpha",
+  "autoload" : {
+    "psr-0" : {
+      "core" : "vendor/",
+      "app" : "/",
+      "admin" : "/"
+    }
+  },
+  "config" : {
+    "bin-dir" : "bin"
+  },
+  "authors" : [ {
+    "name" : "Elson Vinicius",
+    "email" : "vinicius.elson@gmail.com"
+  } ]
+}

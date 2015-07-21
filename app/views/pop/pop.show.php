@@ -1,21 +1,23 @@
+<?php 
+use core\html\Html;
+?>
 <html>
-<head>
-<title><?php echo __FILE__;?></title>
-<!-- Place inside the <head> of your HTML -->
+    <head>
+        <title><?php echo __FILE__;?></title>
+    </head>
+<body>
+<?php 
 
-<script type="text/javascript" src="../../public/lib/tinymce/js/tinymce/tinymce.min.js"></script>
+    $html = new \core\html\Html();
+    $table = $html->table();
+    //$table->head(array('codigo','nome','idade'));
+    $table->body(array("Tipo de documento: ".$oPop->__get('tipoDocumento'), "Codificação: ".$oPop->__get('codificacao'),'pagina nº '));
+    $table->body(array("Data de emissão: ".$oPop->__get('dataEmissao'),"Data de revisão: ".$oPop->__get('dataRevisao'),"Substitui Doc Anterior? ".$oPop->__get('substDocAnterior')));
+    $table->body(array("Elaborado por: ".$oPop->__get('elaboradoPor'),"Revisado por: ".$oPop->__get('revisadoPor'),"Aprovado por: ".$oPop->__get('aprovadoPor')));
+    $table->addAtributos('td', array('colspan'=>'3'), 1);
+    $table->body(array($oPop->__get('pop')));
+    echo $table->getTable();
 
-<script type="text/javascript">
-tinymce.init({
-    selector: "textarea"
- });
-</script>
-</head>
-
-<label for="id"> id: <input type="text" name="id" id="id" value="<?=$oPop->__get('idPop')?>"></label>
-<br>
-<label for="tarefa">Tarefa: <input type="text" name="tarefa" id="tarefa" value="<?=$oPop->__get('tarefa')?>"></label>
-<br>
-<label for="atividades">Atvididades; <textarea rows="50" cols="50" name="atividades" id="atividades"><?=$oPop->__get('atividades')?></textarea></label>
-<br>
+?>
+</body>
 </html>

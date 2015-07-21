@@ -436,7 +436,8 @@ class Input extends GlobalHtml{
 	 * @param string $checked [indice do array ou chave primária a ser previamente selecionada no elemnto]
 	 * @return string
 	 */
-	public function radio( array $dados, $name, $value, $label, $colunas = 1, $checked = null ){
+	public function radio( array $dados, $name, $value, $label, $colunas = 1, $checked = null )
+	{
 		# Contador de colunas da tabela
 		$col = 1;
 		
@@ -484,7 +485,7 @@ class Input extends GlobalHtml{
 		        }
 		    }
 		}
-	   
+		
 		if( ( $col <= $colunas ) && ( $col > 1 ) ){
 			for( $i=$col; $i<=$colunas; $i++ ){
 				$radio .= "<td></td>".PHP_EOL;

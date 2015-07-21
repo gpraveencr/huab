@@ -60,7 +60,17 @@ class Table extends GlobalHtml{
      */
     private $eventos = array();
     
-    public function __construct(){}
+    /**
+     * TODO refatorar o código e definir atributos e eventos da tabela;
+     */
+    public function __construct()
+    {
+        #abertura da tag <table>
+        $table  = '<table ';
+
+        $table .= '>';
+        $this->addTag( $table );
+    }
     
     /**
      * Método para adicionar valores ao cabeçalho da tabela.
@@ -72,6 +82,7 @@ class Table extends GlobalHtml{
         # número de colunas da tabela
         $this->columns = count( $row );
         
+        /*
         #abertura da tag <table>
         if( !$this->startTable ){
             $table  = '<table ';
@@ -79,8 +90,9 @@ class Table extends GlobalHtml{
             $table .= $this->eventos( "table" );
             $table .= '>';
             $this->addTag( $table );
-            $this->startTable = false;
+            $this->startTable = true;
         }
+        */
         
         $head  = '<thead ';
         $head .= $this->atributos( "thead" );

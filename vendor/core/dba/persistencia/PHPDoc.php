@@ -84,6 +84,15 @@ class PHPDoc
 	 */
 	private $fk = array();
 	
+	/**
+	 * armazena a chave primária quando a PK for do 
+	 * tipo auto_increment
+	 * só pode haver 1 (uma) chave primária desse tipo
+	 * por tabela.
+	 * @var string
+	 */
+	private $autoincrement = null;
+	
 	
 	/**
 	 * Construtor da classe PHPDoc, requer como parâmetro o nome
@@ -224,6 +233,11 @@ class PHPDoc
 				# ---------------------------------------------
 				# INSERIR NOVAS REGRAS AQUI
 				# ---------------------------------------------
+				# recupera a lista de classes derivadas (atributo e valor)
+				if (strstr ( $comment, "@autoincrement" )) {
+				    $this->autoincrement = $attributes->getName ();
+				    $this->properties [$this->className][] = $attributes->getName ();
+				}
 			}
 		} // fim do foreach
 		$this->properties;
@@ -305,7 +319,8 @@ class PHPDoc
 	 * Recupera o array de chaves estrangeiras
 	 * @return array
 	 */
-	public function getColumn() {
+	public function getColumn() 
+	{
 	    return $this->column;
 	}
 	
@@ -313,7 +328,8 @@ class PHPDoc
 	 * Recupera as classes derivadas
 	 * @return array
 	 */
-	public function getDerivedClass(){
+	public function getDerivedClass()
+	{
 		return $this->derivedClass;
 	}
 	
@@ -321,8 +337,19 @@ class PHPDoc
 	 * Recupera o array de chaves estrangeiras
 	 * @return string
 	 */
-	public function getFK() {
+	public function getFK() 
+	{
 	    return $this->fk;
+	}
+	
+	/**
+	 * Recupera a chave primária do tipo
+	 * auto_increment
+	 * @return string pk auto_increment
+	 */
+	public function getAutoincrement()
+	{
+	    return $this->autoincrement;
 	}
 	
 }# fim da classe phpDoc

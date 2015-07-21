@@ -9,13 +9,15 @@ namespace core\html;
  
 use \core\html\GlobalHtml;
 
-class Select extends GlobalHtml{
+class Select extends GlobalHtml
+{
 	
 	/**
 	 * Specifies that the drop-down list should automatically get focus when the page loads
 	 * @return array
 	 */
-	public function autofocus(){
+	public function autofocus()
+	{
 		return self::$attributes[] = array( __FUNCTION__ => null );
 	}
 	
@@ -34,7 +36,8 @@ class Select extends GlobalHtml{
 	 * @param string $form
 	 * @return array
 	 */
-	public function form( $form ) {
+	public function form( $form ) 
+	{
 		return self::$attributes[] = array( __FUNCTION__ => $form );
 	}
 	
@@ -43,7 +46,8 @@ class Select extends GlobalHtml{
 	 * @param $multiple = "multiple" 
 	 * @return array
 	 */
-	public function multiple( $multiple = "multiple" ) {
+	public function multiple( $multiple = "multiple" ) 
+	{
 		return self::$attributes[] = array( __FUNCTION__ => $multiple );
 	}
 	
@@ -52,7 +56,8 @@ class Select extends GlobalHtml{
 	 * @param string $name
 	 * @return array
 	 */
-	public function name( $name ) {
+	public function name( $name ) 
+	{
 		return self::$attributes[] = array( __FUNCTION__ => $name );
 	}
 	
@@ -61,7 +66,8 @@ class Select extends GlobalHtml{
 	 * @param string $required
 	 * @return array
 	 */
-	public function required() {
+	public function required() 
+	{
 		return self::$attributes[] = array( __FUNCTION__ => null );
 	}
 	
@@ -70,7 +76,8 @@ class Select extends GlobalHtml{
 	 * @param number
 	 * @return array
 	 */
-	public function size( $size ) {
+	public function size( $size ) 
+	{
 		return self::$attributes[] = array( __FUNCTION__ => $size );
 	}
 
@@ -92,7 +99,24 @@ class Select extends GlobalHtml{
 	 * @tutorial
 	 * <li>o tamanho máximo da string mostrada é de 50 caracteres
 	 */
-	public function add( $name, array $dados, $value, $label, $texto_inicial = null,  $selected = array() ){
+	
+	
+	
+	/**
+	 * método para criar uma caixa de seleção. Aceita dados tipo array resultantes
+	 * de uma consulta PDO ou no formato estabelecido no exemplo.
+	 * @param string $name
+	 * @param array $dados
+	 * @param string $value
+	 * @param string $label
+	 * @param string $texto_inicial
+	 * @param array $selected
+	 * @return string
+	 * @tutorial
+	 * <li>o tamanho máximo da string mostrada é de 50 caracteres
+	 */
+	public function add( $name, array $dados, $value, $label, $texto_inicial = null,  $selected = array() )
+	{
 		$select  = '<select name="'.$name.'"';//abertura da tag
 		$select .= $this->addAttributes();//Adição de atributos
 		$select .= $this->addEvents();//Adição de eventos
@@ -107,7 +131,7 @@ class Select extends GlobalHtml{
                 $select .= '<optgroup label="'.$optgroup.'">'.PHP_EOL;//abertura do optgroup
             
             foreach( $atributos as $kAtributos => $vAtributos ){
-                
+                print_r($vAtributos); die();    
                 $select .= '<option value="'.$vAtributos[$value].'"';//abertura do option e definiçãodo valor
                 if( in_array( $vAtributos[$value], $selected ) ){
                     $select .= ' selected';//verificação dos elementos pré-selecionados
@@ -124,6 +148,38 @@ class Select extends GlobalHtml{
         $select .= '</select>'.PHP_EOL;//fechamento da tag select
         return $select;
 	}#add
+	
+	
+	public function add2( $name, array $dados, $value, $label, $texto_inicial = null, $selected = array() )
+	{
+	    $select  = '<select name="'.$name.'"';//abertura da tag
+	    $select .= $this->addAttributes();//Adição de atributos
+	    $select .= $this->addEvents();//Adição de eventos
+	    $select .= '>'.PHP_EOL;//fechamento da tag
+	    
+	    $select .= !is_null( $texto_inicial ) ? '<option value="">'.$texto_inicial.'</option>' : '<option value="">Selecione</option>';
+	    
+	    foreach ( $dados as $optgroup => $atributos ){
+	    
+	        # nível 1: aqui é definido o optgroup
+	        if( !is_integer( $optgroup ) )
+	            $select .= '<optgroup label="'.$optgroup.'">'.PHP_EOL;//abertura do optgroup
+	            
+	            
+	            $select .= '<option value="'.$atributos[$value].'"';//abertura do option e definiçãodo valor
+	            if( in_array( $atributos[$value], $selected ) ){
+	                $select .= ' selected';//verificação dos elementos pré-selecionados
+	            }
+	            $select .= strlen( $atributos[$label] ) > 50 ? '>'.substr( $atributos[$label], 0, 47 ).'(...)'.'</option>'.PHP_EOL : '>'.$atributos[$label].'</option>'.PHP_EOL;
+
+	            if( !is_integer( $optgroup ) )
+	                $select .= '</optgroup>'.PHP_EOL;//fechamento do optgroup
+	    }
+	    
+	    $select .= '</select>'.PHP_EOL;//fechamento da tag select
+	    
+	    return $select;
+	}
 	
 }# fim da classe select
 

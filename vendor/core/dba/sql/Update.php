@@ -43,6 +43,7 @@ class Update{
 		//foreach ( $paramValor as $keyParam => $valueParam ) {
 		    //$this->bindParam[$valueParam[0]] = $valueParam [1];
 		//}
+
 		return $this->update;
     }#add
     

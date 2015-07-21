@@ -7,6 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'core' => array($vendorDir),
-    'app' => array('./'),
-    'admin' => array('./'),
+    'app' => array($baseDir . '/'),
+    'admin' => array($baseDir . '/'),
 );

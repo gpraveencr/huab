@@ -4,12 +4,15 @@
   "require" : {
     "php" : ">=5.3"
   },
+  "require-dev" : {
+    "tinymce/tinymce" : "=4.2.1"
+  },
   "minimum-stability" : "alpha",
   "autoload" : {
     "psr-0" : {
       "core" : "vendor",
-      "app" : "/",
-      "admin" : "/"
+      "app" : "./",
+      "admin" : "./"
     }
   },
   "config" : {

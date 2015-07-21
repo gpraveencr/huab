@@ -206,7 +206,7 @@ class Select{
 	    
 	    $select .= $this->column." from ".$this->table;
 	    
-	    if( !is_null( $this->where->getWhere() ) )
+	    if( !is_null( $this->where ) )
 	        $select .= implode( ' ', $this->where->getWhere() );
 	    
 	    if( !is_null( $this->having ) )

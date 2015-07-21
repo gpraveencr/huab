@@ -1,13 +1,13 @@
 <?php
 //namespace index;
 
-include_once 'vendor/core/url/Url.class.php';
+//include_once 'vendor/core/url/Url.class.php';
 include_once 'vendor/init/Bootstrap.php';
 include_once 'vendor/db.php';
 require 'vendor/autoload.php';
 include_once 'vendor/config.php';  
 
-use vendor\core\url as url;
+use core\url\Url;
 use vendor\init\Bootstrap;
 
 function debug( $file, $line, $dados, $titulo = "" ){
@@ -29,22 +29,15 @@ class Main
     
     public function __construct()
     {
-        # Inicia ou recupera uma sessão
         session_start();
         
-        # definição do charset da página
         $this->charset();
         
-        # Define o time zone da aplicação
         $this->timezone();
                 
-        # define o tempo l  imite de carregamento da página
         $this->set_time_limit();
         
-        # controla as msg de erro da página.
-        # localhost: mostra todos os erros
-        # acesso remoto: não mostra os erros
-        $this->displayerros();
+        $this->displayerrors();
         
         # Definição do diretório de instalação
         define("BASEDIR", dirname(__FILE__));
@@ -53,22 +46,17 @@ class Main
         # TRATAMENTO DA URL DA APLICAÇÃO
         
         # Definição da URL base do sistema
-        define("BASEURL", url\Url::urlBase() );
+        define("BASEURL", Url::urlBase() );
         
-        /*
-         * Reorganizar esta parte do código, deve ser melhor organizada, mais dinâmica
-         * e configurável pela área de adminsitração. Aqui fica a tabela de rotas e as
-         * regras determinadas pelo usuário da aplicação.
-         */
-        # 1 - Definir o tipo de URL do sistema
-        url\Url::setTipoURL( 2 ); # 1 - URL padrão; 2 - URL amigável; 3 - URL criptografada
+        # Definir o tipo de URL do sistema
+        Url::setTipoURL( 2 ); # 1 - URL padrão; 2 - URL amigável; 3 - URL criptografada
         
-               
         # Analisar e recuperar os elementos da URL
-        $parseUrl = url\Url::parseURL();
+        $parseUrl = Url::parseURL();
         
         # -------------------------------------------------------------------
-            
+        
+        
         /* SEGURANÇA
          * Variável para controle de acesso aos scripts do projeto.
          * Os scritps devem ser acessados apenas pela index, caso 
@@ -86,33 +74,34 @@ class Main
          * A classe Bootstrap recebe como parâmetro o módulo da aplicação e 
          * através deste seleciona a rota.
          */
-        $init = new Bootstrap($parseUrl['m']);
+        $bootstrap = new Bootstrap( $parseUrl['m'] );
         
-        $route = $init->getRoute();
+        # inicializa as rotas da aplicação
+        $route = $bootstrap->getRoute();
         
         # define o caminho da classe a ser instanciada
-        $class = '\\'.$route['route'].'\\Init';
+        $init = '\\'.$route['route'].'\\Init';
         
         # Instância do controlador Init
         # app/Init ou admin/Init
-        new $class( $route );
+        new $init( $route );
         # -------------------------------------------------------------------
         
     }# __construct
     
-    public function charset( $charset = "utf-8")
+    public function charset($charset = "utf-8")
     {
         return header("Content-Type: text/html; charset=$charset",true);
     }
     
-    public function set_time_limit( $time_limit = 2000 )
+    public function set_time_limit($time_limit = 2000)
     {
         # define o tempo limite de carregamento da página
-        return set_time_limit( $time_limit );
+        return set_time_limit($time_limit);
         
     }
     
-    public function displayerros()
+    public function displayerrors()
     {
         if( ($_SERVER['SERVER_NAME'] == "localhost") or ($_SERVER['SERVER_NAME'] == "127.0.0.1") ){
             error_reporting(E_ALL);
@@ -136,7 +125,7 @@ class Main
      * @link http://php.net/manual/pt_BR/function.date-default-timezone-set.php
      * @link http://php.net/manual/pt_BR/timezones.php
      */
-    public function timezone( $timezone = 'America/Recife')
+    public function timezone($timezone = 'America/Recife')
     {
         # fonte: http://php.net/manual/pt_BR/function.date-default-timezone-set.php
         return date_default_timezone_set($timezone);

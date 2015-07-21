@@ -290,7 +290,7 @@ class Html{
 	 * @return string
 	 */
 	public static function a(){
-		return new \A();
+		return $a = !isset( $a ) ? new \A() : $a;
 	}
 	
 	public static function link(){
@@ -340,9 +340,10 @@ class Html{
 #========================================================================
 # TABLES
 	public static function table(){
-		return "";
+		return $table = !isset( $table ) ? new Table() : $table;
 	}
 	
+	/* FUNÇÕES SUBSTITUIDAS PELA CLASSE TABLE
 	public static function caption(){
 		return "";
 	}
@@ -378,6 +379,7 @@ class Html{
 	public static function colgroup(){
 		return "";
 	}
+	*/
 #------------------------------------------------------------------------
 
 	#========================================================================
@@ -468,9 +470,4 @@ class Html{
 
 }
 
-$html = new html();
-
-$html->button()->onclick("javascript: alert('usei o modelo dinamico')");
-#echo $html::button()->add("button", "new html");
- 
 ?>

@@ -2,7 +2,6 @@
 
 namespace core\dba\sql;
 
-
 class SQL{
 
     /**
@@ -143,6 +142,8 @@ class SQL{
         return $this->delete;
         
     }
+    
+    
     public function update(){
               
         if( is_null( $this->update ) ){
@@ -199,6 +200,9 @@ class SQL{
                     # recuperar o número de registros da consulta
                     $this->rows = $this->result->rowCount();
 
+#----                    
+# debug(__FILE__, __LINE__, $this->result->rowCount(),"NÚMERO DE LINHAS:");
+
                     # Recuperar a consulta como um array de dados
                     return $this->result->fetchAll();
 
@@ -213,8 +217,11 @@ class SQL{
                 
                 if( !empty( $this->{$this->function}()->bindValue() ) )
                     foreach( $this->{$this->function}()->bindValue() as $kBindValue => $vBindValue )
-                        $this->result->bindValue( ":".$kBindValue, $vBindValue );
+                        $this->result->bindValue( ":".$kBindValue, $vBindValue ); echo $vBindValue      ;
                     
+                    
+                $this->{$this->function} = null;
+                
                 try {
                     # Executa a instrução SQL
                     $this->result->execute ();

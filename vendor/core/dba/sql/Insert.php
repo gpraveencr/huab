@@ -28,7 +28,7 @@ class Insert{
         $this->insert .= "values( ";
         $this->insert .= implode( ", ", $parametro );
         $this->insert .= " )";
-        
+                
         return $this->insert;
     }
     

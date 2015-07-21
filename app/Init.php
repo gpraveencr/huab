@@ -1,7 +1,7 @@
 <?php
 namespace app;
 
-use vendor\core\url\Url;
+use core\url\Url;
 
 /* CONTROLADOR DA APLICAÇÃO
  * - define qual controlador deve ser acionado para tratamento da requisição
@@ -11,13 +11,12 @@ use vendor\core\url\Url;
  */
 class Init
 {
-    private $controller;
     private $route;
     
     public function __construct( $route )
     {
         $this->route = $route;
-        $controller = $this->run();
+        $this->run();
     }
     
     
@@ -34,16 +33,11 @@ class Init
         }
         
         # define o namespace do controlador
-        $controlador = '\\app\\controllers\\'.ucfirst($this->route['controller']);
-        # instância do controlador
-        $controller = new $controlador( $action );
+        $controller = '\\app\\controllers\\'.ucfirst($this->route['controller']);
         
-        /*
-        # definição da action
-        if( !is_null( $action ))
-            $controller->{$action}();
-            */
-    }
+        # instância do controlador
+        new $controller( $action );
+    }# run
     
 }# Init
 

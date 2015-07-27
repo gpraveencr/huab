@@ -49,13 +49,12 @@ class Main
         define("BASEURL", Url::urlBase() );
         
         # Definir o tipo de URL do sistema
-        Url::setTipoURL( 2 ); # 1 - URL padrão; 2 - URL amigável; 3 - URL criptografada
+        Url::setTipoURL( 3 ); # 1 - URL padrão; 2 - URL amigável; 3 - URL criptografada
         
         # Analisar e recuperar os elementos da URL
         $parseUrl = Url::parseURL();
         
         # -------------------------------------------------------------------
-        
         
         /* SEGURANÇA
          * Variável para controle de acesso aos scripts do projeto.

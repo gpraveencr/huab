@@ -39,6 +39,6 @@ class Delete{
         return $this->delete;
     }
     
-}
+}# Delete
 
 ?>

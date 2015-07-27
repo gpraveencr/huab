@@ -29,7 +29,7 @@ foreach ($pPop->getAllArray() as $key => $pop) {
         $pop["revisadoPor"],
         $pop["aprovadoPor"],
         '<a href="'.\core\url\Url::setURL("pop","edt",array($pop['idPop'], $pop['codificacao']) ).'" target="_blank">editar</a>',
-        '<a href="'.\core\url\Url::setURL("pop","edt",array($pop['idPop'], $pop['codificacao']) ).'" target="_blank">excluir</a>'
+        '<a href="'.\core\url\Url::setURL("pop","rm",array($pop['idPop'], $pop['codificacao']) ).'" target="_parent">excluir</a>'
     ));
 }
 echo $table->getTable();

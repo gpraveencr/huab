@@ -217,7 +217,7 @@ class SQL{
                 
                 if( !empty( $this->{$this->function}()->bindValue() ) )
                     foreach( $this->{$this->function}()->bindValue() as $kBindValue => $vBindValue )
-                        $this->result->bindValue( ":".$kBindValue, $vBindValue ); echo $vBindValue      ;
+                        $this->result->bindValue( ":".$kBindValue, $vBindValue );
                     
                     
                 $this->{$this->function} = null;

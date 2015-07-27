@@ -19,10 +19,15 @@ class Init
         $this->run();
     }
     
-    
+    /**
+     * Método responsável pela instância do controlador
+     * associado a uma deterinada rota. Todo controlador
+     * recebe como parâmetro uma action, que é o gatilho
+     * para determinar o método do controlador dará
+     * tratamento da requisição.
+     */
     public function run()
     {
-        # verificação da action
         if( key_exists('action', $this->route) ){
             $action = $this->route['action'];
         }elseif( key_exists('a', Url::parseURL() ) ){
@@ -35,7 +40,7 @@ class Init
         # define o namespace do controlador
         $controller = '\\app\\controllers\\'.ucfirst($this->route['controller']);
         
-        # instância do controlador
+        # cria uma instância do controlador
         new $controller( $action );
     }# run
     

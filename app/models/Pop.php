@@ -137,8 +137,9 @@ class PopPersist extends \core\dba\sql\SQL
         
         $this->object = &$object;
         
-        if( !is_null( $this->object->__get("idPop") ) )
-            $this->getObject();
+        # função desabilitada, pois interfere no update
+        if( !is_null( $this->object->__get("idPop") ) ){}
+            //$this->getObject();
     }
     
     public function getObject()
@@ -195,18 +196,12 @@ class PopPersist extends \core\dba\sql\SQL
                 if( !is_null($this->object->__get($atributes)) ){
                     if( !in_array($atributes, $doc->getPK())){
                         $columnValue[$atributes] = $this->object->__get($atributes);
-                        echo $atributes."<br>";
                     }
                 }
             }
             $this->update()->add( $columnValue, array("idPop" => $this->object->__get("idPop")), "tab_Pop");
             $this->execute();
         }
-        
-        
-        
-        
-        
         
         /* Tratamento automatizado da função de persistência de dados
          * (if) - tratamento para tabelas com uma chave primária
@@ -262,8 +257,12 @@ class PopPersist extends \core\dba\sql\SQL
     }
     
     public function removeObject()
-    {
+    {   
+        $doc = new \core\dba\persistencia\PHPDoc(get_class($this->object));
         
+        $this->delete()->add(array( "idPop" => $this->object->__get("idPop")), "tab_Pop");
+        
+        $this->execute();
     }
     
     
@@ -283,8 +282,5 @@ class PopPersist extends \core\dba\sql\SQL
      }# setAttributes
     
 }# PopPersist
-
-
-
 
 ?>

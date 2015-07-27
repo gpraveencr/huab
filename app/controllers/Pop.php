@@ -6,7 +6,6 @@ namespace app\controllers;
  * - o controlador deve tratar as exceções de action
  */
  
- 
 use core\url\Url;
 
 class Pop
@@ -17,16 +16,17 @@ class Pop
     {
         # é necessário validar o action da aplicação (importante)
         if( is_null( $action ) ){
-            $this->home();
+            $this->main();
         }else{
             $this->$action();
         }
-        
-        
-            
     }# __construct
     
-    private function home()
+    /**
+     * main é o action padrão do módulo, todo módulo
+     * deve possuir uma ação padrão para redirecionamento.
+     */
+    private function main()
     {
         echo '<p>Não há action definida, exeutando action padrão da aplicação';
     }# home
@@ -37,8 +37,8 @@ class Pop
      */
     public function frm()
     {
-        $class = explode('\\', strtolower(__CLASS__));
-        $class = array_pop($class);
+        $class  = explode('\\', strtolower(__CLASS__));
+        $class  = array_pop($class);
         $method = explode('::', strtolower(__METHOD__));
         include_once 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
     }# home
@@ -59,17 +59,21 @@ class Pop
         foreach( $doc->getColumn() as $column ){
             if( isset($_POST[$column]) ){
                 $oPop->__set($column, $_POST[$column]);
+                debug(__FILE__, __LINE__, $column);
             }
         }
         
         $pPop = new \app\models\PopPersist($oCon, $oPop);
+        
 
         if( isset( $_POST["frm"] ) ){
             
             $pPop->save("insert");
             
             if( !is_null( $doc->getAutoincrement() ) ){
+                
                 $oPop->__set($doc->getAutoincrement(), $pPop->lastInsertId());
+                
                 header("location: ".Url::setURL("pop","show",array($oPop->__get($doc->getAutoincrement()),"insert: pk do tipo auto_increment")));
             }else{
                 header("location: ".Url::setURL("pop","show",array($oPop->__get("idPop"),"insert: pk gerada pelo usuario ou algoritmo")));
@@ -85,8 +89,6 @@ class Pop
         }else{
             # tratamento caso os campos submit não contenham os nomes padrões frm ou edt
         }
-        
-        
     }# add
     
     /**
@@ -108,6 +110,8 @@ class Pop
         # - instanciar um objeto persistente
         $pPop = new \app\models\PopPersist($oCon, $oPop);
         
+        $pPop->getObject();
+        
         # - verificar se 
         /*
          * Essa action suporta apenas 1 registro como resultado da pesquisa, caso
@@ -117,7 +121,6 @@ class Pop
         if( !$pPop->getNumberRows() ){
             echo "<h1>ERROR 404 - Nenhum registro encontrado - ".__CLASS__."(".__LINE__.")</h1>";
             die();
-            
         }
         
 # centralizar o código numa classe de acesso centralizado
@@ -133,9 +136,26 @@ class Pop
      */
     public function rm()
     {
+        # - recuperar a URL
+        $url = Url::parseURL();
+        
+        # - estabeler conexão com o banco de dados
+        $oCon = new \core\dba\pdo\Conexao( DRIVER, HOST, DBNAME, USERNAME, PASSWD );
+        
+        # - instanciar um objeto do modelo de acordo com o Id
+        $oPop = new \app\models\Pop( $url['id'] );
+        
+        # - instanciar um objeto persistente
+        $pPop = new \app\models\PopPersist($oCon, $oPop);
+        
+        $pPop->removeObject();
+        
+        header("location: ".Url::setURL("pop","lista"));
+        
         $class = explode('\\', strtolower(__CLASS__));
+        $class = array_pop($class);
         $method = explode('::', strtolower(__METHOD__));
-        echo 'app/views/'.array_pop($class).'.'.array_pop($method).'.php';
+        include_once 'app/views/'.$class.'/'.$class.'.lista.php';
     }
     
     /**
@@ -155,6 +175,9 @@ class Pop
         
         # - instanciar um objeto persistente
         $pPop = new \app\models\PopPersist($oCon, $oPop);
+        
+        # - recuperar os atributos do objeto
+        $pPop->getObject();
         
         # - verificar se 
         /*

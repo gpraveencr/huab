@@ -105,30 +105,49 @@ class Pop
         $oCon = new \core\dba\pdo\Conexao( DRIVER, HOST, DBNAME, USERNAME, PASSWD );
         
         # - instanciar um objeto do modelo de acordo com o Id
-        $oPop = new \app\models\Pop( $url['id'] );
+        $oPop = new \app\models\Pop( array("idPop" => $url['id']) );
         
         # - instanciar um objeto persistente
-        $pPop = new \app\models\PopPersist($oCon, $oPop);
+        $pPop = new \app\models\PopPersist( $oCon, $oPop );
         
         $pPop->getObject();
         
-        # - verificar se 
+        
         /*
+         * Número de linhas retornadas
+         * 0 = não foram encontrados registros
+         * 1 = OK
+         * > 1 = inconsistência na consulta, retornar página de erro, registrar em log e informar ao administrador do sistema.
+         * 
          * Essa action suporta apenas 1 registro como resultado da pesquisa, caso
          * a consulta retorne mais de 1 registro, deve receber tratamento adequado
          * e o erro deve ser reportado ao administrador (registro de log)
          */
-        if( !$pPop->getNumberRows() ){
-            echo "<h1>ERROR 404 - Nenhum registro encontrado - ".__CLASS__."(".__LINE__.")</h1>";
-            die();
-        }
+        switch ( $pPop->getNumberRows() ){
+            case 0: # nenhum registro encontrado
+                # redirecionar para uma pagina de erro
+                echo "<h1>ERROR 404 - Nenhum registro encontrado - ".__CLASS__."(".__LINE__.")</h1>";
+                die();
+                break;
+                
+            case 1: # saida padrão quando um registro for encontrado
+                
+                # mostar a página com o registro solicitado
+                $class = explode('\\', strtolower(__CLASS__));
+                $class = array_pop($class);
+                $method = explode('::', strtolower(__METHOD__));
+                include_once 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
+                break;
+                
+                default: # inconsistência na consulta, possivelmente erro na clausula where
+                    
+                    # mostrar a página de erro e registrar em log
+                    echo "<h1>ERROR 404 - Inconsistência na consulta, registrar erro no log - ".__CLASS__."(".__LINE__.")</h1>";
+                    die();
+                    break;
+        }# switch
         
-# centralizar o código numa classe de acesso centralizado
-        $class = explode('\\', strtolower(__CLASS__));
-        $class = array_pop($class);
-        $method = explode('::', strtolower(__METHOD__));
-        include_once 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
-    }
+    }# show
     
     /**
      * action RM
@@ -143,7 +162,7 @@ class Pop
         $oCon = new \core\dba\pdo\Conexao( DRIVER, HOST, DBNAME, USERNAME, PASSWD );
         
         # - instanciar um objeto do modelo de acordo com o Id
-        $oPop = new \app\models\Pop( $url['id'] );
+        $oPop = new \app\models\Pop( array("idPop" => $url['id']) );
         
         # - instanciar um objeto persistente
         $pPop = new \app\models\PopPersist($oCon, $oPop);
@@ -156,7 +175,7 @@ class Pop
         $class = array_pop($class);
         $method = explode('::', strtolower(__METHOD__));
         include_once 'app/views/'.$class.'/'.$class.'.lista.php';
-    }
+    }# rm
     
     /**
      * action EDT
@@ -171,7 +190,9 @@ class Pop
         $oCon = new \core\dba\pdo\Conexao( DRIVER, HOST, DBNAME, USERNAME, PASSWD );
         
         # - instanciar um objeto do modelo de acordo com o Id
-        $oPop = new \app\models\Pop( $url['id'] );
+        //$oPop = new \app\models\Pop( $url['id'] );
+        $oPop = new \app\models\Pop( array("idPop" => $url['id']) );
+        
         
         # - instanciar um objeto persistente
         $pPop = new \app\models\PopPersist($oCon, $oPop);
@@ -196,7 +217,7 @@ class Pop
         $class = array_pop($class);
         $method = explode('::', strtolower(__METHOD__));
         include_once 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
-    }
+    }# edt
     
     public function lista()
     {
@@ -208,15 +229,34 @@ class Pop
         
         $pPop = new \app\models\PopPersist($oCon, $oPop);
         
-        $class = explode('\\', strtolower(__CLASS__));
-        $class = array_pop($class);
-        $method = explode('::', strtolower(__METHOD__));
-        include_once 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
-    }
+        include_once $this->_include(__CLASS__,__METHOD__);
+    }# lista
     
-    public function formulario(){
+    
+    public function _include( $_class, $_method )
+    {
+        # obter array com os dados da classe
+        $class  = array_pop( explode('\\', strtolower($_class)) );
+        # obter o nome da classe
+        //$class  = array_pop($class);
+        # obter array com dados do método
+        $method = explode('::', strtolower($_method));
+        # incluir arquivo
         
-    }
-}
+        $view = 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
+        
+        if( file_exists($view) ){
+            return $view;
+            #include_once 'app/views/'.$class.'/'.$class.'.'.array_pop($method).'.php';
+            
+        }else{
+            
+            echo "arquivo não encontrado!";
+            die();
+            
+        }
+    }# _include
+    
+}# Pop
 
 ?>

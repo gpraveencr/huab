@@ -9,92 +9,79 @@ class Pop
      * @column
      * @autoincrement
      */
-    private $idPop = null;
+    private $idPop              = null;
     
     /**
      * @column
      */
-    private $tipoDocumento = null;
+    private $tipoDocumento      = null;
     
     /**
      * @column
      */
-    private $codificacao = null;
+    private $codificacao        = null;
     
     /**
      * @column
      */
-    private $dataEmissao = null;
+    private $dataEmissao        = null;
     
     /**
      * @column
      */
-    private $dataRevisao = null;
+    private $dataRevisao        = null;
     
     /**
      * @column
      */
-    private $substDocAnterior = null;
+    private $substDocAnterior   = null;
     
     /**
      * @column
      */
-    private $elaboradoPor = null;
+    private $elaboradoPor       = null;
     
     /**
      * @column
      */
-    private $revisadoPor = null;
+    private $revisadoPor        = null;
     
     /**
      * @column
      */
-    private $aprovadoPor = null;
+    private $aprovadoPor        = null;
     
     /**
      * @column
      */
-    private $situacao = array();
+    private $situacao           = array();
     
     /**
      * @column
      */
-    private $pop = null;
+    private $pop                = null;
     
     /**
      * @column
      */
-    private $idCabecalho = null;
-    
-    //private $pObj;
-    
-    /*
-    public function __construct( $persitencia = null, $identificador = array() )
+    private $idCabecalho        = null;
+
+    /**
+     * 
+     * @param array $id
+     */
+    public function __construct( array $id = array() )
     {
-        
-        if( !is_null( $persitencia ))
-            $this->pObj = $persitencia;
-        
-        if( !empty( $identificador ) ){
-            foreach ($identificador as $atributo => $valor ){
-                $this->__set( $atributo, $valor );
-            }
-            $persitencia->getObject( $this );
-        }
-    }#__construct
+        if(!empty($id))
+            foreach ($id as $pk => $valor)
+                $this->__set($pk, $valor);
+    }# __construct
     
-    public function getObject()
-    {
-        $this->pObj->getObject( $this );
-    }
-    
-    public function getAll( $where = array() )
-    {
-        return $this->pObj->getAllArray( $this , $where );
-    }
-    */
-        
-    public function __construct( $id = null )
+    /**
+     * array( pk1 => valor, pk2 => valor, ...)
+     * @param array $pk
+     */
+    public function testeIdMultiplo( array $id = array() )
     {
         if( !is_null($id) )
             $this->__set("idPop", $id);
@@ -142,15 +129,27 @@ class PopPersist extends \core\dba\sql\SQL
             //$this->getObject();
     }
     
+    /**
+     * Regra de negócio: esse método deve retornar apenas 1 registro
+     * como resultado do banco de dados. Se retornar mais de 1 registro
+     * a consulta é inválida (fatal_eror). Se não retornar registro na
+     * consulta, a interface deve ser notificada.
+     */
     public function getObject()
     {
+        # obter a documentação da classe
         $doc = new \core\dba\persistencia\PHPDoc(get_class($this->object));
         
+        # definir a tabela e os campos da consulta SQL
         $this->select()->column(array("tab_Pop" => $doc->getColumn()));
         
+        # definir a restrição da consulta com base na chave primária (definir código para chaves múltiplas - relacionamento MxN)
         $this->select()->where("idPop", "=", $this->object->__get("idPop"));
         
         $this->setAttributes($this->execute());
+        
+        //return $this->getNumberRows();
+        
     }# getObject
     
     /**

@@ -11,12 +11,10 @@ use core\url\Url;
  */
 class Init
 {
-    private $route;
     
     public function __construct( $route )
     {
-        $this->route = $route;
-        $this->run();
+        $this->run( $route );
     }
     
     /**
@@ -25,23 +23,24 @@ class Init
      * recebe como parâmetro uma action, que é o gatilho
      * para determinar o método do controlador dará
      * tratamento da requisição.
-     */
-    public function run()
+     * @param array $route
+     */ 
+    public function run( array $route )
     {
-        if( key_exists('action', $this->route) ){
-            $action = $this->route['action'];
+        if( key_exists('action', $route) ){
+            $action = $route['action'];
         }elseif( key_exists('a', Url::parseURL() ) ){
             $a = Url::parseURL();
             $action = $a['a'];
         }else{
             $action = null;
         }
-        
+    
         # define o namespace do controlador
-        $controller = '\\app\\controllers\\'.ucfirst($this->route['controller']);
-        
+        $Controller = '\\app\\controllers\\'.ucfirst($route['controller']);
+    
         # cria uma instância do controlador
-        new $controller( $action );
+        new $Controller( $action );
     }# run
     
 }# Init

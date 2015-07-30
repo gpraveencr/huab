@@ -1,11 +1,10 @@
 <?php
 //namespace index;
 
-//include_once 'vendor/core/url/Url.class.php';
 include_once 'vendor/init/Bootstrap.php';
 include_once 'vendor/db.php';
-require 'vendor/autoload.php';
 include_once 'vendor/config.php';  
+require_once 'vendor/autoload.php';
 
 use core\url\Url;
 use vendor\init\Bootstrap;
@@ -37,19 +36,19 @@ class Main
                 
         $this->set_time_limit();
         
-        $this->displayerrors();
+        $this->displayerrors( $_SERVER['SERVER_NAME'] );
         
         # Definição do diretório de instalação
-        define("BASEDIR", dirname(__FILE__));
+        define( "BASEDIR", dirname(__FILE__) );
         
         # -------------------------------------------------------------------
         # TRATAMENTO DA URL DA APLICAÇÃO
         
         # Definição da URL base do sistema
-        define("BASEURL", Url::urlBase() );
+        define( "BASEURL", Url::urlBase() );
         
         # Definir o tipo de URL do sistema
-        Url::setTipoURL( 3 ); # 1 - URL padrão; 2 - URL amigável; 3 - URL criptografada
+        Url::setTipoURL( 2 ); # 1 - URL padrão; 2 - URL amigável; 3 - URL criptografada
         
         # Analisar e recuperar os elementos da URL
         $parseUrl = Url::parseURL();
@@ -61,7 +60,7 @@ class Main
          * Os scritps devem ser acessados apenas pela index, caso 
          * contrário devem ser bloqueados.
          */
-        define("ACESSO", true);
+        define( "ACESSO", true );
         # -------------------------------------------------------------------
         # INCLUSÃO DOS CONTROLADORES DA APLICAÇÃO
         
@@ -79,30 +78,43 @@ class Main
         $route = $bootstrap->getRoute();
         
         # define o caminho da classe a ser instanciada
-        $init = '\\'.$route['route'].'\\Init';
+        $Init = '\\'.$route['route'].'\\Init';
         
         # Instância do controlador Init
         # app/Init ou admin/Init
-        new $init( $route );
+        new $Init( $route );
         # -------------------------------------------------------------------
         
     }# __construct
     
-    public function charset($charset = "utf-8")
+    private function charset( $charset = "utf-8" )
     {
         return header("Content-Type: text/html; charset=$charset",true);
+    }# charset
+    
+    /**
+     * Define o tempo limite para carregamento
+     * da página, valor padrão 2 segundos
+     * @param number $time_limit 2000
+     */
+    private function set_time_limit( $time_limit = 2000 )
+    {
+        return set_time_limit( $time_limit );
     }
     
-    public function set_time_limit($time_limit = 2000)
+    /**
+     * Identifica a origem da requisição e define o tipo de 
+     * erro a ser mostrado ao usuário. Para as conexões
+     * locais (127.00.1 e localhost) o sistema deve 
+     * mostrar todas as mensagens de erro. Para as demais
+     * conexões o sistema deve ocultar as mensagens de 
+     * erro para o usuário.
+     * 
+     * @param string $server = $_SERVER['SERVER_NAME']
+     */
+    private function displayerrors( $server )
     {
-        # define o tempo limite de carregamento da página
-        return set_time_limit($time_limit);
-        
-    }
-    
-    public function displayerrors()
-    {
-        if( ($_SERVER['SERVER_NAME'] == "localhost") or ($_SERVER['SERVER_NAME'] == "127.0.0.1") ){
+        if( ($server == "localhost") or ($server == "127.0.0.1") ){
             error_reporting(E_ALL);
             ini_set('display_errors', 1);
             ini_set('html_errors', true);
@@ -124,10 +136,10 @@ class Main
      * @link http://php.net/manual/pt_BR/function.date-default-timezone-set.php
      * @link http://php.net/manual/pt_BR/timezones.php
      */
-    public function timezone($timezone = 'America/Recife')
+    private function timezone( $timezone = 'America/Recife' )
     {
         # fonte: http://php.net/manual/pt_BR/function.date-default-timezone-set.php
-        return date_default_timezone_set($timezone);
+        return date_default_timezone_set( $timezone );
     }# timezone
     
     /** VERIFICAR
@@ -142,7 +154,7 @@ class Main
      * <li>
      * <li>
      */
-    public function error_reporting( array $value = array(0) ){
+    private function error_reporting( array $value = array(0) ){
         
         if( $_SERVER['SERVER_NAME'] != "localhost" ){
             # Define o valor de uma opção de configuração
@@ -154,6 +166,7 @@ class Main
             error_reporting(0);
         }else{
             error_reporting(E_ALL);
+            
             ini_set('display_errors', 1);
             ini_set('html_errors', true);
         }
@@ -167,7 +180,7 @@ class Main
         return (( float ) $usec + ( float ) $sec);
     }
     
-    public function baseDir(){
+    private function baseDir(){
         return dirname(__FILE__);
     }# baseDir
     
@@ -185,7 +198,7 @@ class Main
      * nomes das variáveis como array não são validadas pela função. Essa função
      * deve ser mais especializada.
      */
-    public static function protege( &$dados ){
+    private function protege( &$dados ){
         if( !is_array( $dados ) )
             $dados = htmlentities( $dados, ENT_NOQUOTES, "UTF-8" );
         return $dados;

@@ -14,6 +14,8 @@ class Route
         
         $route['error'] =   array('route'=>'app', 'controller'=>'Error');
         
+        $route['agenda'] =  array('route'=>'app', 'controller'=>'Agenda');
+        
         return $route;
     }# initRoute
     

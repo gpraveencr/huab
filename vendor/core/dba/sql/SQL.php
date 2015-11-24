@@ -311,6 +311,6 @@ class SQL{
     public function lastInsertId(){
         return $this->con->lastInsertId();
     }
-
+    
 }# SQL
 ?>

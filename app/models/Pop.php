@@ -78,16 +78,6 @@ class Pop
     }# __construct
     
     /**
-     * array( pk1 => valor, pk2 => valor, ...)
-     * @param array $pk
-     */
-    public function testeIdMultiplo( array $id = array() )
-    {
-        if( !is_null($id) )
-            $this->__set("idPop", $id);
-    }
-        
-    /**
      * Metodo mágico GET, usado para recuperar
      * os atributos do objeto
      * @param string $atributo

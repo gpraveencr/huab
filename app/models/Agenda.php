@@ -32,6 +32,11 @@ class Agenda
     private $horaFinal      = null;
     
     /**
+     * @column
+     */
+    private $sala      = null;
+    
+    /**
      * 
      * @param array $id
      */

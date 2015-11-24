@@ -39,6 +39,32 @@ class Agenda
         include_once $this->_include(__CLASS__,__METHOD__);
     }# home
     
+    
+    private function teste()
+    {
+        include_once "public/lib/dhtmlxScheduler_v4.3.1/codebase/connector/scheduler_connector.php";
+    
+        //nclude_once $this->_include(__CLASS__,__METHOD__);
+    }# home
+    
+    private function dhtmlreadonly()
+    {
+        $url = Url::parseURL();
+    
+        $oCon = new \core\dba\pdo\Conexao( DRIVER, HOST, DBNAME, USERNAME, PASSWD );
+    
+        $oAgenda = new \app\models\Agenda();
+    
+        $pAgenda = new \app\models\AgendaPersist($oCon, $oAgenda);
+    
+        include_once $this->_include(__CLASS__,__METHOD__);
+    }# home
+    
+    private function maps()
+    {
+        include_once $this->_include(__CLASS__,__METHOD__);
+    }
+    
     /**
      * action FRM
      * retorna um formulário de entrada de dados
@@ -82,7 +108,8 @@ class Agenda
                 
                 $oAgenda->__set($doc->getAutoincrement(), $pAgenda->lastInsertId());
                 
-                header("location: ".Url::setURL("agenda","show",array($oAgenda->__get($doc->getAutoincrement()),"insert: pk do tipo auto_increment")));
+                header("location: ".Url::setURL("agenda","dhtmlreadonly"));
+                //header("location: ".Url::setURL("agenda","show",array($oAgenda->__get($doc->getAutoincrement()),"insert: pk do tipo auto_increment")));
             }else{
                 header("location: ".Url::setURL("agenda","show",array($oAgenda->__get("idAgenda"),"insert: pk gerada pelo usuario ou algoritmo")));
             }

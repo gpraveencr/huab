@@ -234,7 +234,8 @@ class Url
 				if( !key_exists("m", $output))
 				    $output['m'] = '/';
 				
-				
+				if( key_exists("a", $output) and empty( $output['a'] ) )
+				    $output['a'] = null;
 			break;
 			
 			case 2:# http://localhost/diretorio/modulo/editar/?1-profissionais de TI estao em alta no mercado/paginador/page=2/usuario=publico/materia=especial/ano=2012
@@ -257,6 +258,9 @@ class Url
 					# recupera a variável "acao"
 					if (key_exists(1, $path))
 						$output['a'] = $path[1];
+						
+                    if( key_exists("a", $output) and empty( $output['a'] ) )
+                        $output['a'] = null;
 				}
 				
 				/*
@@ -317,7 +321,9 @@ class Url
 				
 				if( !key_exists("m", $output))
 				    $output['m'] = '/';
-				
+			
+                if( key_exists("a", $output) and empty( $output['a'] ) )
+                    $output['a'] = null;
 			break;
 		}
 		#output retorna um array de variáveis indexadas

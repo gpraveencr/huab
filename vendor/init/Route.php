@@ -1,4 +1,5 @@
 <?php
+
 namespace vendor\init;
 
 class Route
@@ -8,15 +9,20 @@ class Route
         
         # ROTAS DA ÁREA DE ADMINISTRAÇÃO DO SISTEMA
         # ROTAS DA APLICAÇÃO
-        $route['/'] =       array('route'=>'app', 'controller'=>'Index', 'action'=>'home');
+        $modulo['/'] =       array('route'=>'app', 'controller'=>'Index', 'action'=>'home');
         
-        $route['pop'] =     array('route'=>'app', 'controller'=>'Pop');
+        $modulo['pop'] =     array('route'=>'app', 'controller'=>'Pop');
         
-        $route['error'] =   array('route'=>'app', 'controller'=>'Error');
+        $modulo['error'] =   array('route'=>'app', 'controller'=>'Error');
         
-        $route['agenda'] =  array('route'=>'app', 'controller'=>'Agenda');
+        $modulo['agenda'] =  array('route'=>'app', 'controller'=>'Agenda');
         
-        return $route;
+        $modulo['gantt'] =  array('route'=>'app', 'controller'=>'Dxhtml');
+        
+        # quando for a rota do diretório base, definir action como null
+        $modulo['admin'] =  array('route'=>'admin', 'controller'=>'Tabelas');
+        
+        return $modulo;
     }# initRoute
     
 }# Route

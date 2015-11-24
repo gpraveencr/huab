@@ -47,6 +47,13 @@ RewriteCond %{REQUEST_URI} !^/index\.php
 # or for the site root, or for an extensionless URL, or the
 # requested URL ends with one of the listed extensions
 RewriteCond %{REQUEST_URI} /component/|(/[^.]*|\.(php|html?|feed|pdf|vcf|raw))$ [NC]
+
+# esse código impede acesso direto aos diretórios da aplicação, mas libera a pasta public
+RewriteCond public/$1 -F
+RewriteRule (.+) public/$1 [L]
+RewriteCond $0 !^(index\.php|public/)
+RewriteRule (.*) index.php/$1 [QSA]
+
 # and the requested path and file doesn't directly match a physical file
 RewriteCond %{REQUEST_FILENAME} !-f
 # and the requested path and file doesn't directly match a physical folder

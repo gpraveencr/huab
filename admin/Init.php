@@ -42,6 +42,8 @@ class Init
         new $Controller( $action );
     }# run
     
+    
+    
 }# Init
 
 ?>

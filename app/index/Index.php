@@ -1,5 +1,5 @@
 <?php
-namespace app\controllers;
+namespace app\index;
 
 class Index
 {
@@ -19,11 +19,13 @@ class Index
          * TESTE
          */
         
-        echo '<a href="'.\core\url\Url::setURL("pop","frm").'" target="_blank">Cadastrar POP</a>';
+        echo '<a href="'.\core\url\Url::setURL("teste").'" target="_blank">Tela home do módulo Cliente</a>';
         echo "<br>";
-        echo '<a href="'.\core\url\Url::setURL("pop","lista").'" target="_blank">Listar POP cadastrado</a>';
+        echo '<a href="'.\core\url\Url::setURL("teste","frm").'" target="_blank">Cadastrar Cliente</a>';
         echo "<br>";
-        echo '<a href="'.\core\url\Url::setURL("admin","tabelas").'" target="_blank">Listar tabelas</a>';
+        echo '<a href="'.\core\url\Url::setURL("teste","lista").'" target="_blank">Listar Clientes</a>';
+        echo "<br>";
+        #echo '<a href="'.\core\url\Url::setURL("admin","tabelas").'" target="_blank">Listar tabelas</a>';
         /*
         echo "<p>";
         echo '<a href="'.\core\url\Url::setURL("agenda").'" target="_blank">Agenda</a>';

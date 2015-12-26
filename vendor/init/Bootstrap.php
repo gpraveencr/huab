@@ -42,7 +42,7 @@ class Bootstrap
         # 3 - se não registrado, redirecionar para uma tela de erro,
         # pois a requisição é inválida.
         if( key_exists($modulo, $arrayRoute)){
-            $this->route = $arrayRoute[$modulo];
+            $this->route = $arrayRoute[$modulo]; #array('route'=>'app', 'controller'=>'Index', 'action'=>'home');
         }else{
             header("location: ".\core\url\Url::setURL("error"));
         }

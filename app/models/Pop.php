@@ -243,7 +243,7 @@ class PopPersist extends \core\dba\sql\SQL
         
        
         
-    }
+    }# save
     
     public function removeObject()
     {   
@@ -252,7 +252,7 @@ class PopPersist extends \core\dba\sql\SQL
         $this->delete()->add(array( "idPop" => $this->object->__get("idPop")), "tab_Pop");
         
         $this->execute();
-    }
+    }# removeObject
     
     
     /**
@@ -270,6 +270,6 @@ class PopPersist extends \core\dba\sql\SQL
                 $this->object->__set( $kvResult, $vvResult );
      }# setAttributes
     
-}# PopPersist
+}# class PopPersist
 
 ?>

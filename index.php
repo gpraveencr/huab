@@ -61,6 +61,8 @@ class Main
          * contrário devem ser bloqueados.
          */
         define( "ACESSO", true );
+        
+        
         # -------------------------------------------------------------------
         # INCLUSÃO DOS CONTROLADORES DA APLICAÇÃO
         
@@ -70,17 +72,18 @@ class Main
          * app e admin possuem uma classe Init que gerenciam o acesso aos controladores
          * 
          * A classe Bootstrap recebe como parâmetro o módulo da aplicação e 
-         * através deste seleciona a rota.
+         * através deste seleciona a rota "app" ou "admin".
          */
         $bootstrap = new Bootstrap( $parseUrl['m'] );
         
-        # inicializa as rotas da aplicação
+        # $route: retorna um array de dados: Ex Array ( [route] => app [controller] => Index [action] => home )
         $route = $bootstrap->getRoute();
         
-        # define o caminho da classe a ser instanciada
+        # define o caminho da classe a ser instanciada. Ex: \\app\\Init ou \\admin\\Init
+        # $route['route'] recupera a rota "app" ou "admin"
         $Init = '\\'.$route['route'].'\\Init';
         
-        # Instância do controlador Init
+        # Instância do controlador Init. Ex: new app/Init( array $route );
         # app/Init ou admin/Init
         new $Init( $route );
         # -------------------------------------------------------------------
@@ -112,7 +115,7 @@ class Main
      * 
      * @param string $server = $_SERVER['SERVER_NAME']
      */
-    private function displayerrors( $server )
+    private function displayerrors($server)
     {
         if( ($server == "localhost") or ($server == "127.0.0.1") ){
             error_reporting(E_ALL);
@@ -136,10 +139,10 @@ class Main
      * @link http://php.net/manual/pt_BR/function.date-default-timezone-set.php
      * @link http://php.net/manual/pt_BR/timezones.php
      */
-    private function timezone( $timezone = 'America/Recife' )
+    private function timezone($timezone = 'America/Recife')
     {
         # fonte: http://php.net/manual/pt_BR/function.date-default-timezone-set.php
-        return date_default_timezone_set( $timezone );
+        return date_default_timezone_set($timezone);
     }# timezone
     
     /** VERIFICAR

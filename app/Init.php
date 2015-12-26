@@ -3,11 +3,11 @@ namespace app;
 
 use core\url\Url;
 
-/* CONTROLADOR DA APLICAÇÃO
+/** CONTROLADOR DA APLICAÇÃO
  * - define qual controlador deve ser acionado para tratamento da requisição
- * 
+ * A classe Init é responsável por definir e instanciar o controlador do módulo, também
+ * passa a esse controlador o action que deve ser executado. O action define o método do controlador.
  * @author elson
- *
  */
 class Init
 {
@@ -25,11 +25,16 @@ class Init
      * tratamento da requisição.
      * @param array $route
      */ 
-    public function run( array $route )
+    public function run(array $route)
     {
-        if( key_exists('action', $route) ){
+        # recupera o action da tabela de rotas
+        /* Recupera o action definido na tabela de rotas, essa tabela
+         * tem precedência sobre o URL, pois são mutuamente exclusivas.
+         */
+        if(key_exists('action', $route)){
+            # recupera o action definido na rota da aplicação: Array ( [route] => app [controller] => Index [action] => home )
             $action = $route['action'];
-        }elseif( key_exists('a', Url::parseURL() ) ){
+        }elseif(key_exists('a', Url::parseURL())){ #pode apresentar problemas em múltiplas instâncias?? classe estática!!
             $a = Url::parseURL();
             $action = $a['a'];
         }else{
@@ -37,9 +42,9 @@ class Init
         }
     
         # define o namespace do controlador
-        $Controller = '\\app\\controllers\\'.ucfirst($route['controller']);
-    
-        # cria uma instância do controlador
+        $Controller = '\\app\\'.$route['module'].'\\'.ucfirst($route['controller']);
+        
+        # cria uma instância do controlador e passa como parâmetro o action da aplicação (método)
         new $Controller( $action );
     }# run
     
